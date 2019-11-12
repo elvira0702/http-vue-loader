@@ -252,6 +252,7 @@
 				this.baseURI = componentURL.substr(0, componentURL.lastIndexOf('/')+1);
 				var doc = document.implementation.createHTMLDocument('');
 
+				// 这里有个一个特别变态的作用，会把大写变成小写
 				// IE requires the <base> to come with <style>
 				doc.body.innerHTML = (this.baseURI ? '<base href="'+this.baseURI+'">' : '') + responseText;
 
@@ -273,7 +274,6 @@
 				return this;
 			}.bind(this));
 		},
-
 		_normalizeSection: function(eltCx) {
 
 			var p;
@@ -353,10 +353,15 @@
 	function parseComponentURL(url) {
 
 		var comp = url.match(/(.*?)([^/]+?)\/?(\.vue)?(\?.*|#.*|$)/);
+
 		return {
 			name: comp[2],
-			url: comp[1] + comp[2] + (comp[3] === undefined ? '/index.vue' : comp[3]) + comp[4]
+			url: comp[1] + comp[2] + (comp[3] === undefined ? '' : comp[3]) + comp[4]
 		};
+		// return {
+		// 	name: comp[2],
+		// 	url: comp[1] + comp[2] + (comp[3] === undefined ? '/index.vue' : comp[3]) + comp[4]
+		// };
 	}
 
 	function resolveURL(baseURL, url) {
@@ -442,7 +447,6 @@
 		return new Promise(function(resolve, reject) {
 
 			var xhr = new XMLHttpRequest();
-            		xhr.responseType = 'text';
 			xhr.open('GET', url);
 
 			xhr.onreadystatechange = function() {
@@ -455,6 +459,8 @@
 						reject(xhr.status);
 				}
 			};
+
+			console.info(xhr)
 
 			xhr.send(null);
 		});
