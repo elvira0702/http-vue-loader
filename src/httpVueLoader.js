@@ -459,9 +459,7 @@
 						reject(xhr.status);
 				}
 			};
-
-			console.info(xhr)
-
+			
 			xhr.send(null);
 		});
 	};
